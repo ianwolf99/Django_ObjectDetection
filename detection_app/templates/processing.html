@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Processing Image{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2>Processing Image...</h2>
+            <p>Please wait while we detect objects in your image.</p>
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

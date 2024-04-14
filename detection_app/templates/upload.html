@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Image - Object Detection App{% endblock %}
+
+{% block content %}
+<style>
+	body {
+            background-image: url("http://127.0.0.1:8005/banner2.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+
+        }
+    h2 {
+    	text-align: center;
+    	text-color: DodgerBlue ;
+    	
+    	text-emphasis-color: white;
+    }    
+</style>
+<body>
+	<h2 class="text-white">Upload Image for Object Detection</h2>
+	<form method="post" enctype="multipart/form-data" action="{% url 'upload_image' %}">
+		{% csrf_token %}
+		
+		<div class="input-group">
+			
+											<input type="file" class="form-control" id="imageInput" name="image"aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+											<button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">
+												Detect Object
+											</button>
+										</div>
+		
+	</form>
+{% endblock %}
+
+
+</body>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Processing Image - Object Detection App{% endblock %}
+
+{% block content %}
+    <h2 class="my-4">Processing Image</h2>
+    <p class="loading-text">Please wait while we process your image...</p>
+    <div class="spinner"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Function to check detection status
+    const checkDetectionStatus = (imageId) => {
+        fetch(`/check_detection_status/${imageId}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'complete') {
+                    window.location.replace(`/detection_results/${imageId}/`);
+                } else {
+                    setTimeout(() => checkDetectionStatus(imageId), 2000); // Check again after 2 seconds
+                }
+            })
+            .catch(error => {
+                console.error('Error checking detection status:', error);
+            });
+    };
+
+    // Initiate check for detection completion
+    document.addEventListener('DOMContentLoaded', () => {
+        const uploadedImageId = {{ uploaded_image.id }};
+        checkDetectionStatus(uploadedImageId);
+    });
+</script>
+{% endblock %}

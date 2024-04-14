@@ -1,0 +1,64 @@
+<!-- detection/templates/detection_results.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detection Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .object-box {
+            position: absolute;
+            border: 2px solid #00ff00; /* Green border for bounding box */
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Detection Results</h2>
+    <img src="{{ uploaded_image.image.url }}" id="uploadedImage" class="img-fluid mb-4" style="max-width: 100%;" alt="Uploaded Image">
+    
+    {% for result in results %}
+        {% comment %} Calculate the dimensions and position of the bounding box {% endcomment %}
+        {% with result.box_coordinates as box_coords %}
+            {% with uploaded_image.image.width as img_width %}
+                {% with uploaded_image.image.height as img_height %}
+                    {% with uploaded_image.image.url as img_url %}
+                        {% with result.label as label %}
+                            {% with result.confidence as confidence %}
+                                {% with forloop.counter0 as loop_counter %}
+                                    {% comment %} Calculate box dimensions {% endcomment %}
+                                    {% with box_coords.0 as x1 %}
+                                        {% with box_coords.1 as y1 %}
+                                            {% with box_coords.2 as x2 %}
+                                                {% with box_coords.3 as y2 %}
+                                                    {% comment %} Calculate relative coordinates {% endcomment %}
+                                                    {% with x1_ratio = x1|floatdiv:img_width %}
+                                                        {% with y1_ratio = y1|floatdiv:img_height %}
+                                                            {% with x2_ratio = x2|floatdiv:img_width %}
+                                                                {% with y2_ratio = y2|floatdiv:img_height %}
+                                                                    {% comment %} Create bounding box with label {% endcomment %}
+                                                                    <div class="object-box"
+                                                                         style="left: {{ x1_ratio|floatmultiply:100 }}%; top: {{ y1_ratio|floatmultiply:100 }}%;
+                                                                                width: {{ (x2_ratio - x1_ratio)|floatmultiply:100 }}%; height: {{ (y2_ratio - y1_ratio)|floatmultiply:100 }}%;">
+                                                                        <div>{{ label }} (Confidence: {{ confidence }})</div>
+                                                                    </div>
+                                                                {% endwith %}
+                                                            {% endwith %}
+                                                        {% endwith %}
+                                                    {% endwith %}
+                                                {% endwith %}
+                                            {% endwith %}
+                                        {% endwith %}
+                                    {% endwith %}
+                                {% endwith %}
+                            {% endwith %}
+                        {% endwith %}
+                    {% endwith %}
+                {% endwith %}
+            {% endwith %}
+        {% endwith %}
+    {% endfor %}
+</div>
+</body>
+</html>
